@@ -1,0 +1,14 @@
+{
+  "name": "lambda-pgp-encrypt",
+  "version": "1.0.0",
+  "description": "Lambda function that encrypts files uploaded to S3",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dan Lamb",
+  "license": "MIT",
+  "dependencies": {
+    "openpgp": "^3.0.10"
+  }
+}
