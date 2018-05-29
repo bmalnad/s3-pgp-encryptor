@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: >-
+  PGP encrypts any file uploaded to S3 using the provided base64 encoded public key. 
+
+Parameters:
+  base64encodedpublickey:
+    Type: String
+    Description: 'Base64 encode your PGP public key, then paste that value here'
+  s3bucket:
+    Type: String
+    Description: 'Name of your S3 bucket to watch for new files to encrypt.'
+
+Resources:
+  s3-pgp-encryptor:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: handler.encrypt
+      events:
+        - s3:
+            bucket: !Ref: s3bucket
+            event: s3:ObjectCreated:*
+      Runtime: nodejs6.10
+      CodeUri: s3://s3-pgp-encryptor-demo-bucket/s3-pgp-encryptor.zip
+      Description: >-
+        PGP encrypts any file uploaded to S3 using the provided base64 encoded public key.
+      MemorySize: 128
+      Timeout: 3
+      Policies:
+        - S3CrudPolicy:
+          BucketName: name
+      Environment:
+        Variables:
+          BASE64ENCODEDPUBLICKEY: 
+            Ref: base64encodedpublickey
+          S3BUCKET:
+            Ref: s3bucket
+          
