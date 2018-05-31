@@ -6,11 +6,10 @@ openpgp.config.show_comment = false;
 
 module.exports.encrypt = (event, context, callback) => {
 
-  if(!event.Records[0].s3.object.key.endsWith('.pgp')){
+  if(!event.Records[0].s3.object.key.endsWith('.pgp')){// don't try to encrypt files that are already encrypted
     const s3 = new AWS.S3();
     const s3bucket = event.Records[0].s3.bucket.name;
-    const s3key = event.Records[0].s3.object.key.replace(/\+/g,' ').replace(/%2B/g, '+');  //s3 doesn't play nicely with 
-
+    const s3key = event.Records[0].s3.object.key.replace(/\+/g,' ').replace(/%2B/g, '+');  
     s3.getObject({
       'Bucket': s3bucket,
       'Key': s3key,
@@ -47,7 +46,7 @@ module.exports.encrypt = (event, context, callback) => {
                 console.log(err, err.stack);
               }else{
                 // eslint-disable-next-line                
-                console.log('Replaced ' + s3key + ' with ' + s3key + '.pgp');
+                console.log('s3-pgp-encryptor replaced ' + s3bucket + '/' + s3key + ' with ' + s3key + '.pgp');
               }
             });
           }

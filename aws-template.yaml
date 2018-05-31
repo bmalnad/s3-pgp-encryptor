@@ -6,33 +6,41 @@ Description: >-
 Parameters:
   base64encodedpublickey:
     Type: String
-    Description: 'Base64 encode your PGP public key, then paste that value here'
-  s3bucket:
+    Description: Base64 encode your PGP public key, then paste that value here
+  bucketname:
     Type: String
-    Description: 'Name of your S3 bucket to watch for new files to encrypt.'
+    Description: S3 Bucket to watch for new unencrypted files (MUST NOT ALREADY EXIST!) 
 
 Resources:
-  s3-pgp-encryptor:
+  Bucket1:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: #!Sub 's3-pgp-bucket-${AWS::AccountId}'
+        Ref: bucketname
+  s3pgpencryptor:
     Type: 'AWS::Serverless::Function'
     Properties:
       Handler: handler.encrypt
-      events:
-        - s3:
-            bucket: !Ref: s3bucket
-            event: s3:ObjectCreated:*
       Runtime: nodejs6.10
       CodeUri: s3://s3-pgp-encryptor-demo-bucket/s3-pgp-encryptor.zip
       Description: >-
         PGP encrypts any file uploaded to S3 using the provided base64 encoded public key.
       MemorySize: 128
-      Timeout: 3
+      Timeout: 15
       Policies:
-        - S3CrudPolicy:
-          BucketName: name
+        - S3FullAccessPolicy:
+            # NOTE: Need to ref the parameter to avoid a circular dependency.
+            BucketName: 
+              Ref: bucketname
       Environment:
         Variables:
           BASE64ENCODEDPUBLICKEY: 
             Ref: base64encodedpublickey
-          S3BUCKET:
-            Ref: s3bucket
-          
+      Events:
+        BucketEvent1:
+          Type: S3
+          Properties:
+            Bucket:
+              Ref: Bucket1
+            Events:
+              - 's3:ObjectCreated:*'
