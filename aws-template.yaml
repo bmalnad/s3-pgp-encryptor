@@ -21,7 +21,7 @@ Resources:
     Type: 'AWS::Serverless::Function'
     Properties:
       Handler: handler.encrypt
-      Runtime: nodejs6.10
+      Runtime: nodejs10.x
       CodeUri: s3://s3-pgp-encryptor-demo-bucket/s3-pgp-encryptor.zip
       Description: >-
         PGP encrypts any file uploaded to S3 using the provided base64 encoded public key.
