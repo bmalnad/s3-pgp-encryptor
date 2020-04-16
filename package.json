@@ -9,6 +9,6 @@
   "author": "Dan Lamb",
   "license": "MIT",
   "dependencies": {
-    "openpgp": "^3.0.10"
+    "openpgp": "^4.10.2"
   }
 }
