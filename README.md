@@ -7,9 +7,10 @@ PGP encrypts files added to an S3 bucket
     Name of the S3 bucket where you will upload files you wish to encrypt (must NOT already exist).
   * ##### base64encodedpublickey
     Base64 encode your PGP public key.  If you're not sure how to do that, go to https://www.base64encode.org/ 
+    Note: the base64 encoded string must not be longer than 4096 bytes (this is a limitation of the template system used by AWS)
 ### Use
 * Upload any file to the S3 bucket you specified above and the file will be encrypted using your PGP public key.
 * Problems? Email lamb.dan@gmail.com 
 
 ### License
-&copy; 2018 [Dan Lamb](https://github.com/bmalnad). This project is available under the terms of the MIT license.
+&copy; 2020 [Dan Lamb](https://github.com/bmalnad). This project is available under the terms of the MIT license.
