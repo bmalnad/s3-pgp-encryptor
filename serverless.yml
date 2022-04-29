@@ -10,7 +10,7 @@ service: s3-pgp-encryptor
 # The `provider` block defines where your service will be deployed
 provider:
   name: aws
-  runtime: nodejs10.x
+  runtime: nodejs14.x
   iamRoleStatements:
   - Effect: "Allow"
     Action:
